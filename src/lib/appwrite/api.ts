@@ -1,7 +1,8 @@
 import { ID, Query } from "appwrite";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
-import { INewPost, INewUser } from "@/types";
-import { error } from "console";
+import { INewPost, INewUser,IUpdatePost } from "@/types";
+
+
 
 export async function createUserAccount(user: INewUser) {
   try {
@@ -142,7 +143,8 @@ export async function createPost(post:INewPost){
         tags: tags,
       }
     );
-
+    
+    
     if(!newPost){
       await deleteFile(uploadedFile.$id);
       throw Error;

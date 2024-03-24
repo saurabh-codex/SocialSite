@@ -4,7 +4,7 @@ import {
   useQueryClient,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import { SignInAccount, SignOutAccount, createPost, createUserAccount, getRecentPosts } from "@/lib/appwrite/api.ts";
+import { SignInAccount, SignOutAccount, createPost, createUserAccount, getRecentPosts, updatePost } from "@/lib/appwrite/api.ts";
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 

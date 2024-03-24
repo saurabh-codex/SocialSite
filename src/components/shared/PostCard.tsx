@@ -1,6 +1,9 @@
-import React from 'react'
+import { Models } from "appwrite"
 
-const PostCard = () => {
+type PostCardProps ={
+  post: Models.Document;
+}
+const PostCard = ({post}:PostCardProps) => {
   return (
     <div>PostCard</div>
   )

@@ -56,10 +56,12 @@ const PostForm = ({ post, action }: PostFormProps) => {
         imageId: post.imageId,
         imageUrl: post.imageUrl,
       });
-
+       
       if (!updatedPost) {
+        console.log(updatePost);
+        
         toast({
-          title: `${action} post failed. Please try again.`,
+          title: `${action} post failed.Please try again 64.`,
         });
       }
       return navigate(`/posts/${post.$id}`);
@@ -70,10 +72,12 @@ const PostForm = ({ post, action }: PostFormProps) => {
       ...value,
       userId: user.id,
     });
-
+    console.log(newPost);
+    
+    
     if (!newPost) {
       toast({
-        title: `${action} post failed. Please try again.`,
+        title: `${action} post failed.78 Please try again.`,
       });
     }
     navigate("/");
