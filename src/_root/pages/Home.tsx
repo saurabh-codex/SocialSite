@@ -20,7 +20,7 @@ const Home = () => {
           (
           <ul className="flex flex-col flex-1 gap-9 w-full">
             {posts?.documents.map((post: Models.Document)=>(
-              <PostCard post = {post}/>
+              <PostCard key = {post.$id} post = {post}/>
             ))}
           </ul>
           )}

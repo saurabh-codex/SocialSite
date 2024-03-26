@@ -43,7 +43,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setIsLoading(true);
     try {
       const currentAccount = await getCurrentUser();
-      console.log(getCurrentUser());
+      // console.log(getCurrentUser());
       
       if (currentAccount) {
         setUser({
