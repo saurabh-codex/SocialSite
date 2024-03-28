@@ -4,7 +4,7 @@ import {
   useQueryClient,
   useInfiniteQuery,
 } from "@tanstack/react-query";
-import { SignInAccount, SignOutAccount, createPost, createUserAccount, deleteSavedPost, getCurrentUser, getRecentPosts, likePost, savePost, updatePost } from "@/lib/appwrite/api.ts";
+import { SignInAccount, SignOutAccount, createPost, createUserAccount, deletePost, deleteSavedPost, getCurrentUser, getInfinitePosts, getPostById, getRecentPosts, likePost, savePost, searchPosts, updatePost } from "@/lib/appwrite/api.ts";
 import { INewPost, INewUser, IUpdatePost } from "@/types";
 import { QUERY_KEYS } from "./queryKeys";
 
@@ -49,6 +49,17 @@ export const useUpdatePost = () => {
     },
   });
 };
+export const useDeletePost = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({postId, imageId}: {postId:string, imageId:string}) => deletePost(postId, imageId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: [QUERY_KEYS.GET_RECENT_POSTS],
+      });
+    },
+  });
+};
 
 export const useGetRecentPosts = () => {
   return useQuery({
@@ -68,7 +79,7 @@ export const useLikePost = () => {
         queryKey:[QUERY_KEYS.GET_POST_BY_ID,data?.$id]
       })
       queryClient.invalidateQueries({
-        queryKey:[QUERY_KEYS.GET_POST_BY_ID]
+        queryKey:[QUERY_KEYS.GET_RECENT_POSTS]
       })
       queryClient.invalidateQueries({
         queryKey:[QUERY_KEYS.GET_POSTS]
@@ -88,7 +99,7 @@ export const useSavePost = () => {
      userId:string}) => savePost(postId, userId),
      onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey:[QUERY_KEYS.GET_POST_BY_ID]
+        queryKey:[QUERY_KEYS.GET_RECENT_POSTS]
       })
       queryClient.invalidateQueries({
         queryKey:[QUERY_KEYS.GET_POSTS]
@@ -107,7 +118,7 @@ export const useDeleteSavedPost = () => {
   mutationFn:(saveRecordId: string) => deleteSavedPost(saveRecordId),
      onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey:[QUERY_KEYS.GET_POST_BY_ID]
+        queryKey:[QUERY_KEYS.GET_RECENT_POSTS]
       })
       queryClient.invalidateQueries({
         queryKey:[QUERY_KEYS.GET_POSTS]
@@ -125,4 +136,35 @@ export const useGetCurrentUser = () => {
     queryFn:getCurrentUser
   })
   
+}
+
+export const useGetPostById = (postId:string) => {
+  return useQuery({
+    queryKey:[QUERY_KEYS.GET_POST_BY_ID, postId],
+    queryFn: () => getPostById(postId),
+    enabled: !!postId
+  })
+}
+
+export const useGetPosts = () => {
+  return useInfiniteQuery({
+    queryKey: [QUERY_KEYS.GET_INFINITE_POSTS],
+    queryFn: getInfinitePosts,
+    getNextPageParam:(lastPage) => {
+
+      if(lastPage && lastPage?.documents.length === 0) return null;
+
+      const lastId = lastPage?.documents[lastPage?.documents.length-1].$id;
+
+      return lastId;
+    }
+  })
+}
+
+export const useSearchPosts = (searchTerm: string) => {
+  return useQuery({
+    queryKey:[QUERY_KEYS.SEARCH_POSTS,searchTerm],
+    queryFn:() => searchPosts(searchTerm),
+    enabled: !!searchTerm,
+  })
 }
