@@ -3,7 +3,7 @@ import GridPostList from '@/components/shared/GridPostList';
 import { savePost } from '@/lib/appwrite/api';
 import { useGetCurrentUser } from '@/lib/react-query/queriesAndMutations'
 import { Models } from 'appwrite';
-import React from 'react'
+
 
 const Saved = () => {
   const {data: currentUser} = useGetCurrentUser();
