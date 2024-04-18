@@ -1,6 +1,6 @@
 import { Loader } from '@/components/shared';
 import GridPostList from '@/components/shared/GridPostList';
-import { savePost } from '@/lib/appwrite/api';
+
 import { useGetCurrentUser } from '@/lib/react-query/queriesAndMutations'
 import { Models } from 'appwrite';
 
@@ -36,7 +36,7 @@ const Saved = () => {
         </ul>
       )}
     </div>
-  )
-}
+  );
+};
 
 export default Saved
