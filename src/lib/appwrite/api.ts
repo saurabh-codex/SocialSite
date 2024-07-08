@@ -1,7 +1,6 @@
 import { ID, Query } from "appwrite";
 import { account, appwriteConfig, avatars, databases, storage } from "./config";
 import { INewPost, INewUser,IUpdatePost, IUpdateUser } from "@/types";
-import { log } from "console";
 
 
 
@@ -170,7 +169,7 @@ export async function uploadFile(file:File){
   }
 }
 
-export async function getFilePreview(fileId:string){
+export async function getFilePreview(fileId:string): Promise<string | undefined> {
   try {
     const fileUrl = storage.getFilePreview(
       appwriteConfig.storageId,
@@ -184,9 +183,10 @@ export async function getFilePreview(fileId:string){
     if(!fileUrl) throw Error;
 
 
-    return fileUrl;
+    return fileUrl.toString();
   } catch (error) {
     console.log(error);
+    return undefined;
     
   }
 }
@@ -229,7 +229,7 @@ export async function updatePost(post: IUpdatePost) {
       if (!uploadedFile) throw Error;
 
       // Get new file url
-      const fileUrl = getFilePreview(uploadedFile.$id);
+      const fileUrl = await getFilePreview(uploadedFile.$id);
       if (!fileUrl) {
         await deleteFile(uploadedFile.$id);
         throw Error;
@@ -441,7 +441,7 @@ export async function updateUser(user:IUpdateUser){
 
   try {
      let image ={
-    imageUrl: user.imageUrl,
+    imageUrl: user.imageUrl as string,
     imageId : user.imageId
   }
 
@@ -449,7 +449,7 @@ export async function updateUser(user:IUpdateUser){
     const uploadedFile = await uploadFile(user.file[0]);
     if(!uploadedFile) throw Error;
 
-    const fileUrl = getFilePreview(uploadedFile.$id)
+    const fileUrl = await getFilePreview(uploadedFile.$id)
     if(!fileUrl){
       await deleteFile(uploadedFile.$id);
       throw Error;
