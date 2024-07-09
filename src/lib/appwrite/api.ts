@@ -92,7 +92,7 @@ export async function getCurrentUser() {
     );
     // console.log(databases.listDocuments);
     
-    if (!currentUser.documents.length) {
+    if (!currentUser) {
       throw new Error("Current user not found in database");
     }
 
