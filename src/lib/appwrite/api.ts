@@ -69,6 +69,8 @@ export async function SignInAccount(user: { email: string; password: string }) {
 export async function getAccount() {
   try {
     const currentAccount = await account.get();
+    console.log(currentAccount);
+    
     return currentAccount;
   } catch (error) {
     console.error("Error getting account:", error);
@@ -79,7 +81,7 @@ export async function getAccount() {
 export async function getCurrentUser() {
   try {
     const currentAccount = await getAccount();
-    // console.log(currentAccount);
+    console.log("current account:",currentAccount);
     
     if (!currentAccount) {
       throw new Error("Current account not found");
@@ -90,9 +92,9 @@ export async function getCurrentUser() {
       appwriteConfig.userCollectionId,
       [Query.equal("accountId", currentAccount.$id)]
     );
-    // console.log(databases.listDocuments);
+    console.log("currentuser:", currentUser);
     
-    if (!currentUser) {
+    if (!currentUser || !currentUser.documents || currentUser.documents.length === 0) {
       throw new Error("Current user not found in database");
     }
 
